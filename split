@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+int count_spaces(char*);
+int split(char*, char**);
+
+int main()
+{
+	char* str = "   Lorem  ipsum dolor   sit amet, consectetur adipiscing elit,    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua  ";
+
+	const int spaces = count_spaces(str);
+	printf("%d\n", spaces);
+	char** words = malloc(spaces * sizeof(char*));	// number of words should be approximately equal to number of whitespace sequences
+
+	int c = split(str, words);
+
+	for (int i = 0; i < c; ++i)
+		puts(words[i]);
+
+	return 0;
+}
+
+int count_spaces(char* str)
+{
+	int i = 0;
+	int count = 0;
+	while (str[i] != '\0')
+	{
+		if (isspace(str[i]))
+		{
+			while (isspace(str[i]) && str[i] != '\0')
+				++i;
+			++count;
+		}
+
+		while (!isspace(str[i]) && str[i] != '\0')
+			++i;
+	}
+
+	return count;
+}
+
+int split(char* str, char** out)
+{
+	int word_count = 0;
+	int i = 0;
+	while (str[i])
+	{
+		while (isspace(str[i]) && str[i] != '\0')
+			++i;	// skip whitespaces
+
+		int j = i;
+		while (isalnum(str[j]) && str[j] != '\0')
+			++j;
+
+		strncpy(out[word_count], &str[i], j - i);
+		++word_count, ++i;
+	}
+
+	return word_count;
+}
