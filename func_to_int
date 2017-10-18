@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+void foo(int);
+void func_to_int(void(*[])(int), int[], int);
+
+int main()
+{
+	/*typedef void(*fp)(int);
+	fp foo_ptr[] = { *foo, *foo, *foo, *foo, *foo }; // OR { foo, foo, foo, foo, foo } */
+
+	void (*foo_ptr[])(int) = { *foo, *foo, *foo, *foo, *foo }; // OR { foo, foo, foo, foo, foo }
+	int a[] = { 1, 2, 3, 4, 5 };
+	int len = 5;
+
+	func_to_int(foo_ptr, a, 5);
+
+	return 0;
+}
+
+void foo(int a)
+{
+	printf("%d\n", a);
+}
+
+void func_to_int(void(*foo_p[])(int), int arr[], int len)
+{
+	for (int i = 0; i < len; ++i)
+		foo_p[i](arr[i]);
+}
